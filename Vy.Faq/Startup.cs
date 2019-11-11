@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Vy.Faq.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Vy.Faq
 {
@@ -19,7 +21,9 @@ namespace Vy.Faq
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-
+			
+			services.AddDbContext<FaqContext>(opt =>
+				opt.UseSqlServer(Configuration.GetConnectionString("VyFaq")));
 			services.AddControllersWithViews();
 
 			// In production, the React files will be served from this directory

@@ -1,19 +1,21 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Vy.Faq.Models;
 using Microsoft.EntityFrameworkCore;
+using Vy.Faq.Services;
 
 namespace Vy.Faq
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		private readonly IDatabaseInitialize _databaseInitialize;
+		public Startup(IConfiguration configuration, IDatabaseInitialize databaseInitialize)
 		{
 			Configuration = configuration;
+			_databaseInitialize = databaseInitialize;
 		}
 
 		public IConfiguration Configuration { get; }
@@ -22,7 +24,7 @@ namespace Vy.Faq
 		public void ConfigureServices(IServiceCollection services)
 		{
 			
-			services.AddDbContext<FaqContext>(opt =>
+			services.AddDbContext<VyContext>(opt =>
 				opt.UseSqlServer(Configuration.GetConnectionString("VyFaq")));
 			services.AddControllersWithViews();
 
@@ -31,6 +33,7 @@ namespace Vy.Faq
 			{
 				configuration.RootPath = "client-app/dist";
 			});
+
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +69,14 @@ namespace Vy.Faq
 					spa.UseVueDevelopmentServer();
 				}
 			});
+
+			using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+			{
+				_databaseInitialize.Initialize(serviceScope.ServiceProvider.GetRequiredService<VyContext>());
+			}
+
+			
 		}
+
 	}
 }

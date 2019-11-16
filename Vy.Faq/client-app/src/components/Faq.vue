@@ -55,6 +55,7 @@ export default {
 .q_container {
   font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
 }
 .a_container {
   font-size: 16px;

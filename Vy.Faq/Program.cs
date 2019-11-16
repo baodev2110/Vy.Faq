@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Vy.Faq.Models;
+using Vy.Faq.Services;
 
 namespace Vy.Faq
 {
@@ -18,6 +15,9 @@ namespace Vy.Faq
 
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
+				.ConfigureServices(serviceCollection =>
+					serviceCollection
+						.AddScoped<IDatabaseInitialize, DatabaseInitialize>())
 				.UseStartup<Startup>();
 	}
 }

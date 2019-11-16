@@ -11,25 +11,25 @@ namespace Vy.Faq.Controllers
     [ApiController]
     public class FaqsController : ControllerBase
     {
-        private readonly FaqContext _context;
+        private readonly VyContext _vyContext;
 
-        public FaqsController(FaqContext context)
+        public FaqsController(VyContext vyContext)
         {
-            _context = context;
+            _vyContext = vyContext;
         }
 
         // GET: api/Faqs
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Models.Faq>>> GetFaqItems()
         {
-            return await _context.FaqItems.ToListAsync();
+            return await _vyContext.Faqs.ToListAsync();
         }
 
         // GET: api/Faqs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Models.Faq>> GetFaq(int id)
         {
-            var faq = await _context.FaqItems.FindAsync(id);
+            var faq = await _vyContext.Faqs.FindAsync(id);
 
             if (faq == null)
             {
@@ -50,11 +50,11 @@ namespace Vy.Faq.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(faq).State = EntityState.Modified;
+            _vyContext.Entry(faq).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _vyContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -77,15 +77,15 @@ namespace Vy.Faq.Controllers
         [HttpPost]
         public async Task<ActionResult<Models.Faq>> PostFaq(Models.Faq faq)
         {
-            _context.FaqItems.Add(faq);
-            await _context.SaveChangesAsync();
+            _vyContext.Faqs.Add(faq);
+            await _vyContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetFaq), new { id = faq.Id }, faq);
         }
 
         private bool FaqExists(int id)
         {
-            return _context.FaqItems.Any(e => e.Id == id);
+            return _vyContext.Faqs.Any(e => e.Id == id);
         }
     }
 }

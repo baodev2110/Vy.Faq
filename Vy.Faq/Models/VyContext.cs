@@ -10,5 +10,6 @@ namespace Vy.Faq.Models
 		}
 
 		public DbSet<Faq> Faqs { get; set; }
+		public DbSet<Contact> Contacts { get; set; }
 	}
 }

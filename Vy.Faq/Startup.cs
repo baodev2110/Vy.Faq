@@ -26,10 +26,10 @@ namespace Vy.Faq
 			
 			services.AddDbContext<VyContext>(opt =>
 				opt.UseSqlServer(Configuration.GetConnectionString("VyFaq")));
-			services.AddControllersWithViews();
+            services.AddControllers();
 
-			// In production, the React files will be served from this directory
-			services.AddSpaStaticFiles(configuration =>
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
 			{
 				configuration.RootPath = "client-app/dist";
 			});
@@ -39,7 +39,8 @@ namespace Vy.Faq
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			if (env.IsDevelopment())
+
+            if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
@@ -53,14 +54,12 @@ namespace Vy.Faq
 
 			app.UseRouting();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller}/{action=Index}/{id?}");
-			});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
-			app.UseSpa(spa =>
+            app.UseSpa(spa =>
 			{
 				spa.Options.SourcePath = "client-app";
 
@@ -74,9 +73,8 @@ namespace Vy.Faq
 			{
 				_databaseInitialize.Initialize(serviceScope.ServiceProvider.GetRequiredService<VyContext>());
 			}
-
-			
-		}
+                       
+        }
 
 	}
 }

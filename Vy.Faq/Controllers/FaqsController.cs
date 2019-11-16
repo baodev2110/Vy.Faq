@@ -71,6 +71,38 @@ namespace Vy.Faq.Controllers
             return NoContent();
         }
 
+        // PATH: api/Faqs/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchFaq(int id, [FromBody]Models.Faq faq)
+        {
+            if (id != faq.Id)
+            {
+                return BadRequest();
+            }
+
+            _vyContext.Entry(faq).State = EntityState.Modified;
+
+            try
+            {
+                await _vyContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!FaqExists(faq.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Faqs
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -82,7 +114,7 @@ namespace Vy.Faq.Controllers
 
             return CreatedAtAction(nameof(GetFaq), new { id = faq.Id }, faq);
         }
-
+        
         private bool FaqExists(int id)
         {
             return _vyContext.Faqs.Any(e => e.Id == id);

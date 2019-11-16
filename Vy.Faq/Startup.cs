@@ -29,7 +29,7 @@ namespace Vy.Faq
 			// In production, the React files will be served from this directory
 			services.AddSpaStaticFiles(configuration =>
 			{
-				configuration.RootPath = "ClientApp/build";
+				configuration.RootPath = "client-app/dist";
 			});
 		}
 
@@ -59,11 +59,11 @@ namespace Vy.Faq
 
 			app.UseSpa(spa =>
 			{
-				spa.Options.SourcePath = "ClientApp";
+				spa.Options.SourcePath = "client-app";
 
 				if (env.IsDevelopment())
 				{
-					spa.UseReactDevelopmentServer(npmScript: "start");
+					spa.UseVueDevelopmentServer();
 				}
 			});
 		}

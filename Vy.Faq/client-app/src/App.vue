@@ -53,6 +53,7 @@ export default {
 }
 
 .content {
-  padding: 40px;
+  padding-top: 40px;
+  width: 50%;
 }
 </style>

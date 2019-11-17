@@ -6,36 +6,61 @@
       <form id="questionForm">
         <div>
           <label>
-            Fornavn
-            <input type="text" required v-model="contact.firstname" />
+            {{labels.firstname}}
+            <input
+              type="text"
+              required
+              :disabled="formIsSent"
+              v-model="contact.firstname"
+              :placeholder="placeholderPrefix+labels.firstname.toLowerCase()"
+            />
           </label>
         </div>
         <div>
           <label>
-            Etternavn
-            <input type="text" required v-model="contact.surname" />
+            {{labels.surname}}
+            <input
+              type="text"
+              required
+              :disabled="formIsSent"
+              v-model="contact.surname"
+              :placeholder="placeholderPrefix+labels.surname.toLowerCase()"
+            />
           </label>
         </div>
         <div>
           <label>
-            Epost
-            <input type="email" required v-model="contact.email" />
+            {{labels.email}}
+            <input
+              type="email"
+              required
+              :disabled="formIsSent"
+              v-model="contact.email"
+              :placeholder="placeholderPrefix+labels.email.toLowerCase()"
+            />
           </label>
         </div>
         <div>
           <label>
-            Telefon
-            <input type="tel" required v-model="contact.phone" />
+            {{labels.phone}}
+            <input
+              type="tel"
+              required
+              :disabled="formIsSent"
+              v-model="contact.phone"
+              :placeholder="placeholderPrefix+labels.phone.toLowerCase()"
+            />
           </label>
         </div>
         <div>
           <label>
-            Spørmål
-            <textarea type="text" required v-model="contact.question" />
+            {{labels.question}}
+            <textarea type="text" required :disabled="formIsSent" v-model="contact.question" />
           </label>
         </div>
         <div>
-          <button type="button" @click="submit()">Send inn</button>
+          <button v-if="!formIsSent" type="button" @click="submit()">Send inn</button>
+          <p class="feedback" v-else>Spørsmålet ditt er sendt inn</p>
         </div>
       </form>
     </div>
@@ -46,12 +71,21 @@
 export default {
   data() {
     return {
+      formIsSent: false,
+      placeholderPrefix: "Skriv inn ",
+      labels: {
+        firstname: "Fornavn",
+        surname: "Etternavn",
+        email: "Email",
+        phone: "Telefon",
+        question: "Spørsmål"
+      },
       contact: {
-        firstname: "Hei",
-        surname: "dete",
-        email: "sdf",
-        phone: "sdf",
-        question: "dfsf"
+        firstname: "",
+        surname: "",
+        email: "",
+        phone: "",
+        question: ""
       }
     };
   },
@@ -60,6 +94,7 @@ export default {
       if (document.querySelector("#questionForm").reportValidity()) {
         let comp = this;
         let contact = comp.contact;
+        comp.formIsSent = true;
         fetch("/api/QuestionForm/", {
           method: "POST",
           body: JSON.stringify(contact),
@@ -82,5 +117,38 @@ export default {
 <style>
 .contact {
   padding-top: 40px;
+}
+
+.feedback {
+  color: gray;
+}
+
+form input,
+form textarea {
+  display: block;
+  margin: 10px 0 20px 0;
+  padding: 5px;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+}
+form textarea {
+  width: 500px;
+  height: 100px;
+}
+
+form button {
+  border: none;
+  border-radius: 15px;
+  background: black;
+  color: white;
+  font-weight: bold;
+  padding: 20px 30px 20px 30px;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
 }
 </style>

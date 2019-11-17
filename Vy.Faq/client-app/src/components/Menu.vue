@@ -6,10 +6,11 @@
     <div>
       <nav>
         <a
+          :class="{'is_active': selectedItem===index}"
           href="#"
           v-for="(item, index) in items"
           :key="index"
-          @click="activeIndex = index"
+          @click="$emit('change', index)"
         >{{item}}</a>
       </nav>
     </div>
@@ -22,12 +23,11 @@ export default {
     items: {
       type: Array,
       default: () => []
-    }
-  },
-  data() {
-    return {
-      activeIndex: 0
-    };
+    },
+    selectedItem: {
+      type: Number,
+      default: 0
+    },
   }
 };
 </script>
@@ -36,10 +36,16 @@ export default {
 a {
   text-decoration: none;
   color: black;
-  padding: 0 20px 0 20px;
+  padding: 20px;
 }
-.menu_container{
-  display:flex;
-  align-items:center;
+a.is_active {
+  border-bottom: 2px solid black;
+}
+.menu_container {
+  display: flex;
+  align-items: center;
+}
+nav {
+  margin-left: 40px;
 }
 </style>

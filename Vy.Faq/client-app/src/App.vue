@@ -1,8 +1,14 @@
 <template>
   <div id="app">
-    <Menu class="menu" :items="['Spørsmål og svar', 'Kontakt oss']" />
+    <Menu
+      class="menu"
+      :selectedItem="selectedItem"
+      :items="['Spørsmål og svar', 'Kontakt oss']"
+      @change="selectItem"
+    />
     <div class="content">
-      <Faq />
+      <Faq v-if="selectedItem === 0" />
+      <Contact v-if="selectedItem === 1" />
     </div>
   </div>
 </template>
@@ -10,12 +16,24 @@
 <script>
 import Menu from "./components/Menu.vue";
 import Faq from "./components/Faq.vue";
+import Contact from "./components/Contact.vue";
 
 export default {
   name: "app",
   components: {
     Menu,
-    Faq
+    Faq,
+    Contact
+  },
+  data() {
+    return {
+      selectedItem: 0
+    };
+  },
+  methods: {
+    selectItem(index) {
+      this.selectedItem = index;
+    }
   }
 };
 </script>
@@ -37,5 +55,4 @@ export default {
 .content {
   padding: 40px;
 }
-
 </style>
